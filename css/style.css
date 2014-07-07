@@ -1,0 +1,30 @@
+div.article {
+	display: inline-block;
+	margin-bottom: 20px;
+	text-align: center;
+	background-color: #b6b6f2;
+	border-radius: 5px;
+	height: 400px;
+	width: 300px;
+	padding-top: 10px;
+	margin: 20px;
+	overflow: hidden;
+}
+
+div.article-small {
+	position: absolute;
+	width: 300px;
+	max-width: 300px;
+	opacity: 1;
+	z-index: 100;
+}
+
+div.article-big {
+	position: absolute;
+	width: 80%;
+	left: 10%;
+	opacity: 0;
+	text-align: left;
+	overflow: hidden;
+	z-index: 99;
+}
