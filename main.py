@@ -18,18 +18,12 @@ import webapp2
 from Handler import *
 import re
 import Database
+import json
+from MemberHandlers import *
 
 class MainHandler(Handler):
     def get(self):
         self.render('home.html')
-
-class MembersHandler(Handler):
-	def get(self):
-		user = self.get_user()
-		if user:
-			self.render('member.html')
-		else:
-			self.redirect('/login')
 
 class LoginPageHandler(Handler):
 	def get(self):
@@ -85,10 +79,27 @@ class RegisterHandler(Handler):
 			self.login(Database.get_user(username))
 			self.response.out.write("Success")
 
+class GetUserHandler(Handler):
+	def get(self):
+		query_list = self.request.query_string.split('=')
+		user = None
+		if len(query_list) < 2:
+			user = self.get_user()
+		else:
+			username = query_list[1]
+			user = Database.get_user(username)
+		if not user:
+			return
+		# TODO
+		obj = json.dumps({"username":user.username, "permissions":user.permissions})
+		self.response.out.write(str(obj))
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/members', MembersHandler),
+    ('/members/moderator', ModeratorHandler),
     ('/login', LoginPageHandler),
 	('/control/login', LoginHandler),
-	('/control/register', RegisterHandler)
+	('/control/register', RegisterHandler),
+	('/control/getuser', GetUserHandler)
 ], debug=True)

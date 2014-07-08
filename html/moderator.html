@@ -1,0 +1,68 @@
+{% extends "member_base.html" %}
+
+{% block member_css %}
+<link rel="stylesheet" type="text/css" href="../css/list.css">
+{% endblock member_css %}
+
+{% block member_js %}
+<script src="../js/list.min.js"></script>
+<script src="../js/moderator.js"></script>
+<script>
+	var options = {
+		valueNames: [ 'name', 'uname' ]
+	};
+
+	var userList = new List('users', options);
+</script>
+{% endblock member_js %}
+
+{% block member_panel_header %}
+Edit Permissions
+{% endblock member_panel_header %}
+
+{% block member_panel %}
+<div class="row">
+	<div class="col-md-12">
+		<p class="lead">The permissions editor allows you to control what other users can and can't do.</p>
+	</div>
+</div><hr>
+<div class="row">
+	<form method="POST">
+		<div class="col-md-6">
+			<h4>Select a user to modify their permissions.</h4>
+			<div id="users">
+				<input class="search" placeholder="Search names" />
+				<ul class="list">
+					{% for user in users %}
+					<li style="padding:2px; margin-bottom:2px;">
+						<h3 style="display:inline" class="name">{{user.first_name}} {{user.last_name}}</h3>
+						<label style="position:absolute; right: 30px;" for="{{user.username}}">{{user.username}}
+							<input class="username" type="radio" name="username" id="{{user.username}}" value="{{user.username}}">
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 well">
+				<input type="checkbox" name="bio_is_displayed" id="bio_is_displayed">
+				<label for="bio_is_displayed">bio_is_displayed</label><br>
+				<input type="checkbox" name="is_a_moderator" id="is_a_moderator">
+				<label for="is_a_moderator">is_a_moderator</label><br>
+				<input type="checkbox" name="can_create_news_posts" id="can_create_news_posts">
+				<label for="can_create_news_posts">can_create_news_posts</label><br>
+				<input type="checkbox" name="can_edit_news_posts" id="can_edit_news_posts">
+				<label for="can_edit_news_posts">can_edit_news_posts</label><br>
+				<input type="checkbox" name="can_claim_workshops" id="can_claim_workshops">
+				<label for="can_claim_workshops">can_claim_workshops</label><br>
+				<input type="checkbox" name="can_free_workshops" id="can_free_workshops">
+				<label for="can_free_workshops">can_free_workshops</label><br>
+				<input type="checkbox" name="can_cancel_workshops" id="can_cancel_workshops">
+				<label for="can_cancel_workshops">can_cancel_workshops</label><br>
+				<input type="checkbox" name="can_edit_homepage" id="can_edit_homepage">
+				<label for="can_edit_homepage">can_edit_homepage</label><br>
+				<br>
+				<input type="submit" disabled>
+			</div>
+		</form>
+	</div>
+	{% endblock member_panel %}

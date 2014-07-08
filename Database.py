@@ -23,18 +23,11 @@ class MyUser(ndb.Model):
 	email = ndb.StringProperty(required=True)
 
 	bio = ndb.StructuredProperty(Bio)
-	bio_is_displayed = ndb.BooleanProperty(required=True)
 
-	is_a_moderator = ndb.BooleanProperty(required=True)
+	permissions = ndb.StringProperty(required=True)
 
-	can_create_news_posts = ndb.BooleanProperty(required=True)
-	can_edit_news_posts = ndb.BooleanProperty(required=True)
-
-	can_claim_workshops = ndb.BooleanProperty(required=True)
-	can_free_workshops = ndb.BooleanProperty(required=True)
-	can_cancel_workshops = ndb.BooleanProperty(required=True)
-
-	can_edit_homepage = ndb.BooleanProperty(required=True)
+	def has_permission(s):
+		return s in this.permissions
 
 
 def add_user(first_name, last_name, username, password, email):
@@ -53,14 +46,7 @@ def add_user(first_name, last_name, username, password, email):
 					username=username,
 					password=password_hash,
 					bio=bio,
-					bio_is_displayed=False,
-					is_a_moderator=False,
-					can_create_news_posts=False,
-					can_edit_news_posts=False,
-					can_claim_workshops=False,
-					can_free_workshops=False,
-					can_cancel_workshops=False,
-					can_edit_homepage=False)
+					permissions='')
 
 	my_user.put()
 	# update memcache
@@ -69,8 +55,53 @@ def add_user(first_name, last_name, username, password, email):
 	memcache.set(users_key, my_users)
 	return True
 
+def set_permissions(username, bio_is_displayed=False,
+								is_a_moderator=False,
+								can_create_news_posts=False,
+								can_edit_news_posts=False,
+								can_claim_workshops=False,
+								can_free_workshops=False,
+								can_cancel_workshops=False,
+								can_edit_homepage=False):
+
+	my_user = get_user(username)
+	if not my_user:
+		return False
+
+	s = ''
+	if bio_is_displayed:
+		s += ' bio_is_displayed'
+	if is_a_moderator:
+		s += ' is_a_moderator'
+	if can_create_news_posts:
+		s += ' can_create_news_posts'
+	if can_edit_news_posts:
+		s += ' can_edit_news_posts'
+	if can_claim_workshops:
+		s += ' can_claim_workshops'
+	if can_free_workshops:
+		s += ' can_free_workshops'
+	if can_cancel_workshops:
+		s += ' can_cancel_workshops'
+	if can_edit_homepage:
+		s += ' can_edit_homepage'
+
+	my_user.permissions = s
+	my_user.put()
+	# update memcache
+	my_users = memcache.get(users_key)
+	add_user_to_dict(my_user, my_users)
+	memcache.set(users_key, my_users)
+	return True
+
+def has_permission(username, s):
+	my_user = get_user(username)
+	if not my_user:
+		return False
+	return s in my_user.permissions
+
 def username_exists(username):
-	return username in get_all_users()
+	return username in get_user_dict()
 
 def is_registered_user(user, update=False):
 	if not user:
@@ -78,11 +109,11 @@ def is_registered_user(user, update=False):
 	return username_exists(user.username())
 
 def get_user(username):
-	if not username in get_all_users():
+	if not username in get_user_dict():
 		return None
-	return get_all_users()[username]
+	return get_user_dict()[username]
 
-def get_all_users(update=False):
+def get_user_dict(update=False):
 	my_users = memcache.get(users_key)
 
 	# update
@@ -91,6 +122,10 @@ def get_all_users(update=False):
 		my_users = memcache.get(users_key)
 
 	return my_users
+
+def get_all_users(update=False):
+	users = get_user_dict(update)
+	return [users[user] for user in users]
 
 def update_user_memcache():
 	registered_users = ndb.gql("SELECT * FROM MyUser")
@@ -107,7 +142,7 @@ def is_registered_user(user, update=False):
 		return False
 
 	# check if user exists
-	user_exists = user.user_id() in get_all_users()
+	user_exists = user.user_id() in get_user_dict()
 	return user_exists
 
 def make_salt(length = 5):

@@ -5,13 +5,16 @@
 {% endblock js %}
 
 {% block content %}
-<div class="container" style="position:relative; top:50px">
-	<div class="row" style="padding-left:10%; padding-right:10%; text-align:center;">
+<div class="container" style="position:relative; top:50px;">
+	<div class="row">
+		<div class="col" style="text-align:center;">
 		<h2>Please only create an account if you are a performing or administrative member of Dramatech.</h2>
-		<h3>All account privileges are available only after approval by a moderator.</h3>
+		<h3>Account privileges are granted individually by moderators.</h3>
+		<br><br><br><br>			
+		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-6 login"><br>
+		<div class="col-sm-6 login well"><br>
 			<h2>Login</h2>
 			<form method="POST">
 				Username<br>
@@ -24,7 +27,7 @@
 				<input class="btn btn-inverse" type="submit"><span class="error" id="username-password"></span>
 			</form>
 		</div>
-		<div class="col-sm-6 register"><br>
+		<div class="col-sm-6 register well"><br>
 			<h2>Register</h2>
 			<form method="POST">
 				First Name<br>

@@ -3,6 +3,8 @@
 {% block css %}
 <link rel="stylesheet" type="text/css" href="../css/simple-sidebar.css">
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+{% block member_css %}
+{% endblock member_css %}
 {% endblock css %}
 
 {% block js %}
@@ -12,6 +14,8 @@
 		$("#wrapper").toggleClass("active");
 	});
 </script>
+{% block member_js %}
+{% endblock member_js %}
 {% endblock js %}
 
 {% block navbar %}
@@ -26,19 +30,9 @@
 		<ul class="sidebar-nav">
 			<li class="sidebar-brand"><a href="/">Dramatech Theater</a>
 			</li>
-			<li><a href="/members">My DT</a>
+			<li><a href="/members">My Account</a>
 			</li>
-			<li><a href="#">Shortcuts</a>
-			</li>
-			<li><a href="#">Overview</a>
-			</li>
-			<li><a href="#">Events</a>
-			</li>
-			<li><a href="#">About</a>
-			</li>
-			<li><a href="#">Services</a>
-			</li>
-			<li><a href="#">Contact</a>
+			<li><a href="/members/moderator">Edit Permissions</a>
 			</li>
 		</ul>
 	</div>
@@ -50,7 +44,8 @@
 				<a id="menu-toggle" href="#" class="btn btn-default">
 					<i class="fa fa-bars"></i>
 				</a>
-				Simple Sidebar
+				{% block member_panel_header %}
+				{% endblock member_panel_header %}
 			</h1>
 		</div>
 		<!-- Keep all page content within the page-content inset div! -->
