@@ -35,7 +35,10 @@ window.onload = function() {
 		})
 
 		// expand this article
-		$('div.article').promise().done(function() {
+		// $('div.article').promise().done(function() {
+			$('html, body').animate({
+				scrollTop: $("#" + id).offset().top
+			});
 			$article.animate({
 				'width': "100%",
 				'height': "100%",
@@ -43,10 +46,6 @@ window.onload = function() {
 				"left": "0",
 				"margin-left": "0",
 				"margin-right": "0"
-			}, function() {
-				$('html, body').animate({
-					scrollTop: $("#" + id).offset().top
-				});
 			})
 			var $smallArticle = $article.find(".article-small")
 			var $bigArticle = $article.find(".article-big")
@@ -59,7 +58,7 @@ window.onload = function() {
 			})
 			$smallArticle.fadeTo("fast", 0)
 			$bigArticle.fadeTo("slow", 1)			
-		})
+		// })
 	})
 
 	$('a.contract-article').click(function() {
@@ -87,14 +86,14 @@ window.onload = function() {
 		$bigArticle.fadeTo("fast", 0)
 
 		// show all other articles
+		var $articles = $('.article')
+		$articles.each(function(index) {
+			console.log(this.id)
+			if (id != this.id) {
+				$(this).fadeTo("slow", 1)
+			}
+		})
 		$('div.article').promise().done(function() {
-			var $articles = $('.article')
-			$articles.each(function(index) {
-				console.log(this.id)
-				if (id != this.id) {
-					$(this).fadeTo("fast", 1)
-				}
-			})
 			$articles.each(function(index) {
 				$(this).css({
 					"position": "initial"
