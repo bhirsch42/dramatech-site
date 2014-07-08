@@ -32,6 +32,7 @@ class MyUser(ndb.Model):
 
 	can_claim_workshops = ndb.BooleanProperty(required=True)
 	can_free_workshops = ndb.BooleanProperty(required=True)
+	can_cancel_workshops = ndb.BooleanProperty(required=True)
 
 	can_edit_homepage = ndb.BooleanProperty(required=True)
 
@@ -57,6 +58,7 @@ def add_user(first_name, last_name, username, password, email):
 					can_edit_news_posts=False,
 					can_claim_workshops=False,
 					can_free_workshops=False,
+					can_cancel_workshops=False,
 					can_edit_homepage=False)
 
 	my_user.put()

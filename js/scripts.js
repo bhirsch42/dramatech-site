@@ -9,6 +9,8 @@ window.onload = function() {
 		articleOpen = true;
 		var id = this.id
 		var $article = $('div.article#' + id)
+		var $smallArticle = $article.find(".article-small")
+		var $bigArticle = $article.find(".article-big")
 		var thisTop = $article.offset().top - 20
 		oldLeft = $article.offset().left - 20
 		console.log(thisTop)
@@ -31,38 +33,47 @@ window.onload = function() {
 		$articles.each(function(index) {
 			if (this.id != id) {
 				$(this).fadeTo("fast", 0)
+				$(this).css({
+					"z-index":-1
+				})
 			}
 		})
 
 		// expand this article
-		// $('div.article').promise().done(function() {
-			$('html, body').animate({
-				scrollTop: $("#" + id).offset().top
-			});
-			$article.animate({
-				'width': "100%",
-				'height': "100%",
-				"border-radius":"0",
-				"left": "0",
-				"margin-left": "0",
-				"margin-right": "0"
-			})
-			var $smallArticle = $article.find(".article-small")
-			var $bigArticle = $article.find(".article-big")
+		$('html, body').animate({
+			scrollTop: $("#" + id).offset().top
+		});
+		// var totalHeight = $bigArticle.outerHeight(true)
+		// console.log($bigArticle.outerHeight(true))
+		var curHeight = $article.height();
+		$article.css('height', 'auto');
+		var autoHeight = $article.height();
+		if ($(window).height() > autoHeight) {
+			autoHeight = $(window).height()
+		}
+		$article.height(curHeight).animate({
+			'width': "100%",
+			'height': autoHeight,
+			"border-radius":"0",
+			"left": "0",
+			"margin-left": "0",
+			"margin-right": "0",
+			"z-index": 100
+		})
 			// layer the buttons properly
+
+			$smallArticle.fadeTo("fast", 0)
+			$bigArticle.fadeTo("slow", 1)
 			$smallArticle.css({
-				"z-index":"99"
+				"z-index": 99
 			})
 			$bigArticle.css({
-				"z-index":"100"
+				"z-index": 100
 			})
-			$smallArticle.fadeTo("fast", 0)
-			$bigArticle.fadeTo("slow", 1)			
-		// })
-	})
+		})
 
-	$('a.contract-article').click(function() {
-		var id = this.id
+$('a.contract-article').click(function() {
+	var id = this.id
 		// contract this article
 		var $article = $('div.article#' + id)
 		console.log($article.oldLeft)
@@ -76,12 +87,6 @@ window.onload = function() {
 		})
 		var $smallArticle = $article.find(".article-small")
 		var $bigArticle = $article.find(".article-big")
-		$smallArticle.css({
-			"z-index":"100"
-		})
-		$bigArticle.css({
-			"z-index":"99"
-		})
 		$smallArticle.fadeTo("slow", 1)
 		$bigArticle.fadeTo("fast", 0)
 
@@ -96,9 +101,16 @@ window.onload = function() {
 		$('div.article').promise().done(function() {
 			$articles.each(function(index) {
 				$(this).css({
-					"position": "initial"
+					"position": "initial",
+					"z-index": "initial"
 				})
 			})
+		})
+		$smallArticle.css({
+			"z-index": 100
+		})
+		$bigArticle.css({
+			"z-index": 99
 		})
 		articleOpen = false
 	})

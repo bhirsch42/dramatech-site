@@ -5,7 +5,7 @@ import logging
 import time
 import Database
 import hmac
-import secret
+import Secret
 
 
 class Handler(webapp2.RequestHandler):
@@ -30,9 +30,6 @@ class Handler(webapp2.RequestHandler):
 		user = self.get_user()
 		self.render('home.html', passwords_dont_match=passwords_dont_match, username_is_taken=username_is_taken, username_is_invalid=username_is_invalid, entries_length=entries_length, user=user, login_error=login_error)
 
-	def get_user(self, username):
-		return Database.get_user(username)
-
 	def set_secure_cookie(self, name, val):
 		cookie_val = make_secure_val(val)
 		self.response.headers.add_header('Set-Cookie', '%s=%s; Path=/' % (name, cookie_val))
@@ -47,15 +44,17 @@ class Handler(webapp2.RequestHandler):
 	def logout(self):
 		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
 
+	def get_user(self, username):
+		return Database.get_user(username)
+
 	def get_user(self):
 		username = self.read_secure_cookie('user_id')
 		if not username:
 			return None
 		return Database.get_user(username)
 
-secret = open('secret.txt').read()
-
 def make_secure_val(val):
+	secret = Secret.secret()
 	return '%s|%s' % (val, hmac.new(secret, val).hexdigest())
 
 def check_secure_val(secure_val):

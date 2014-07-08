@@ -21,6 +21,18 @@ class MainHandler(Handler):
     def get(self):
         self.render('home.html')
 
+class MembersHandler(Handler):
+	def get(self):
+		user = self.get_user()
+		if not user:
+			self.redirect('/login')
+
+class LoginHandler(Handler):
+	def get(self):
+		self.render('login.html')
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/members', MembersHandler),
+    ('/login', LoginHandler)
 ], debug=True)
