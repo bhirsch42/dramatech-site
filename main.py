@@ -16,6 +16,8 @@
 #
 import webapp2
 from Handler import *
+import re
+import Database
 
 class MainHandler(Handler):
     def get(self):
@@ -27,12 +29,64 @@ class MembersHandler(Handler):
 		if not user:
 			self.redirect('/login')
 
-class LoginHandler(Handler):
+class LoginPageHandler(Handler):
 	def get(self):
 		self.render('login.html')
+
+class LoginHandler(Handler):
+	def get(self):
+		pass
+	def post(self):
+		username = self.request.get('username')
+		password = self.request.get('password')
+		logging.info(username + ", " + password)
+		if (Database.valid_password(username, password)):
+			self.login(Database.get_user(username))
+			self.response.out.write("Success")
+		else:
+			self.response.out.write("Failure")
+
+class RegisterHandler(Handler):
+	def get(self):
+		pass
+	def post(self):
+		username_is_taken = False
+		passwords_dont_match = False
+		username_is_invalid = False
+		email_is_invalid = False
+
+		username = self.request.get('username')
+		password = self.request.get('password')
+		password_repeat = self.request.get('password-repeat')
+		email = self.request.get('email')
+		first_name = self.request.get('first-name')
+		last_name = self.request.get('last-name')
+
+		username_is_taken = username in Database.get_all_users()
+		passwords_dont_match = password != password_repeat
+		username_is_invalid = re.match("^[a-zA-Z0-9_-]{3,20}$", username) is None
+		if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+			email_is_invalid = True
+		if username_is_taken or passwords_dont_match or username_is_invalid or email_is_invalid:
+			s = "Failure"
+			if username_is_taken:
+				s += " username_is_taken"
+			if passwords_dont_match:
+				s += " passwords_dont_match"
+			if username_is_invalid:
+				s += ' username_is_invalid'
+			if email_is_invalid:
+				s += ' email_is_invalid'
+			self.response.out.write(s)
+		else:
+			Database.add_user(first_name, last_name, username, password, email)
+			self.login(Database.get_user(username))
+			self.response.out.write("Success")
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/members', MembersHandler),
-    ('/login', LoginHandler)
+    ('/login', LoginPageHandler),
+	('/control/login', LoginHandler),
+	('/control/register', RegisterHandler),
 ], debug=True)

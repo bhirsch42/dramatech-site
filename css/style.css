@@ -29,6 +29,16 @@ div.article-big {
 }
 
 div.login {
+	height: 400px;
 	background-color: rgb(240,240,240);
-	height: 100%;
+}
+
+div.register {
+	height: 400px;
+}
+
+span.error {
+	display: inline-block;
+	margin-left: 5px;
+	color: red;
 }

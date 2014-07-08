@@ -46,7 +46,8 @@ def add_user(first_name, last_name, username, password, email):
 	now = datetime.datetime.now()
 
 	bio = Bio(image_url='', description='')
-	my_user = MyUser(first_name=first_name,
+	my_user = MyUser(datetime_created=now,
+					first_name=first_name,
 					last_name=last_name,
 					email=email,
 					username=username,
@@ -75,6 +76,11 @@ def is_registered_user(user, update=False):
 	if not user:
 		return False
 	return username_exists(user.username())
+
+def get_user(username):
+	if not username in get_all_users():
+		return None
+	return get_all_users()[username]
 
 def get_all_users(update=False):
 	my_users = memcache.get(users_key)
@@ -117,6 +123,6 @@ def valid_password(username, password):
 	user = get_user(username)
 	if not user:
 		return False
-	h = user.password_hash
+	h = user.password
 	salt = h.split(',')[0]
 	return h == make_password_hash(username, password, salt)
