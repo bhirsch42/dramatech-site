@@ -3,13 +3,14 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
-	<link rel="stylesheet" type="text/css" href="../css/carousel.css">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+	{% block css %}
+	{% endblock css %}
 </head>
 
 <body>
 <!-- topbar -->
-{% block topbar %}
+{% block navbar %}
 <div class="navbar-wrapper">
 	<div class="container">
 		<div class="navbar navbar-default navbar-static-top" role="navigation">
@@ -57,7 +58,7 @@
 
 	</div>
 </div>
-{% endblock topbar %}
+{% endblock navbar %}
 
 <!-- content -->
 {% block content %}
