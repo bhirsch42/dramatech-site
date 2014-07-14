@@ -20,6 +20,7 @@ import re
 import Database
 import json
 from MemberHandlers import *
+from ArticleHandlers import *
 
 class MainHandler(Handler):
     def get(self):
@@ -94,10 +95,21 @@ class GetUserHandler(Handler):
 		obj = json.dumps({"username":user.username, "permissions":user.permissions})
 		self.response.out.write(str(obj))
 
+class AboutHandler(Handler):
+	def get(self):
+		self.render('about.html')
+
+class GettingInvolvedHandler(Handler):
+	def get(self):
+		self.render('gettinginvolved.html')
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
+    ('/about', AboutHandler),
+    ('/about/gettinginvolved', GettingInvolvedHandler),
     ('/members', MembersHandler),
     ('/members/moderator', ModeratorHandler),
+    ('/members/articles', ArticlesHandler),
     ('/login', LoginPageHandler),
 	('/control/login', LoginHandler),
 	('/control/register', RegisterHandler),

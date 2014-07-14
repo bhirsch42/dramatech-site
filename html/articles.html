@@ -1,0 +1,56 @@
+{% extends "member_base.html" %}
+
+{% block js %}
+<script type="text/javascript" src="../js/articlemanager.js"></script>
+{% endblock js%}
+
+{% block member_panel_header %}
+Article Manager
+{% endblock member_panel_header %}
+
+{% block member_panel %}
+<div class="row">
+	<div class="col-md-4">
+		<div class="well">
+			<h2>Create New Article</h2><hr>
+			<form method="POST">
+				<input name="form-type" type="hidden" value="create-new-article">
+				Image URL<br>
+				<input class="create-new-article" type="text" name="image-url"><br>
+				<br>
+				Heading (required)<br>
+				<input class="create-new-article" type="text" name="heading" required="required"><br>
+				<br>
+				Summary (required)<br>
+				<textarea class="create-new-article" name="summary" style="width:100%;" required="required"></textarea><br>
+				<br>
+				Content<br>
+				<textarea class="create-new-article" name="content" style="width:100%;"></textarea><br>
+				<br>
+				<input class="btn btn-inverse" type="submit"><span class="error" id="username-password"></span>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-8 text-center">
+		<div class="article" id="0">
+			<img class="template img-circle" src="" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+			<div class="article-small" id="0">
+				<h2><span class="template" name="heading"></span></h2>
+				<div>
+					<span class="template" name="summary"></span>
+				</div>
+				<br>
+				<p class="button-template" style=""><a class="btn btn-default expand-article" role="button" id="0">Show details &raquo;</a></p>
+			</div>
+			<div class="article-big" id="0">
+				<h2 style="text-align:center;"><span class="template" name="heading"></span></h2>
+				<div class="lead">
+					<span class="template" name="content"></span>
+				</div>
+				<br>
+				<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="0">&laquo; Hide details</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock member_panel %}

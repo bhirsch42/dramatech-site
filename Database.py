@@ -6,11 +6,21 @@ import random
 from string import letters
 import datetime
 
-users_key = "users"
+users_key = 'users'
+slides_key = 'slides'
+shows_key = 'shows'
+
+class Reservation(ndb.Model):
+	first_name = ndb.StringProperty()
+	last_name = ndb.StringProperty()
+
+	num_tickets = ndb.IntegerProperty()
+
 
 class Bio(ndb.Model):
 	image_url = ndb.StringProperty(required=True)
 	description = ndb.TextProperty(required=True)
+
 
 class MyUser(ndb.Model):
 	datetime_created = ndb.DateTimeProperty(required=True, auto_now_add=False)
@@ -29,6 +39,29 @@ class MyUser(ndb.Model):
 	def has_permission(s):
 		return s in this.permissions
 
+
+class CarouselSlide(ndb.Model):
+	datetime_created = ndb.DateTimeProperty(auto_now_add=True)
+
+	image_url = ndb.StringProperty(required=True)
+
+	title = ndb.StringProperty()
+	description = ndb.StringProperty()
+
+	button_text = ndb.StringProperty()
+	button_link = ndb.StringProperty()
+
+
+class Show(ndb.Model):
+	slide = ndb.StructuredProperty(CarouselSlide)
+
+	max_reservations = ndb.IntegerProperty()
+	num_reservations = ndb.IntegerProperty()
+
+class Article(ndb.Model):
+	heading = ndb.StringProperty()
+	summary = ndb.TextProperty()
+	content = ndb.TextProperty()
 
 def add_user(first_name, last_name, username, password, email):
 	# check if user already exists
@@ -54,6 +87,7 @@ def add_user(first_name, last_name, username, password, email):
 	add_user_to_dict(my_user, my_users)
 	memcache.set(users_key, my_users)
 	return True
+
 
 def set_permissions(username, bio_is_displayed=False,
 								is_a_moderator=False,
