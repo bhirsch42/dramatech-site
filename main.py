@@ -23,8 +23,16 @@ from MemberHandlers import *
 from ArticleHandlers import *
 
 class MainHandler(Handler):
-    def get(self):
-        self.render('home.html')
+	def get(self):
+		articles = Database.get_all_articles()
+		articles.sort(reverse=True, key=lambda r: r.datetime_created)
+		front_articles = []
+		num_articles = 5
+		if len(articles) < 5:
+			num_articles = len(articles)
+		for i in range(num_articles):
+			front_articles.append(articles[i])
+		self.render('home.html', articles=front_articles)
 
 class LoginPageHandler(Handler):
 	def get(self):
@@ -36,12 +44,16 @@ class LoginHandler(Handler):
 	def post(self):
 		username = self.request.get('username')
 		password = self.request.get('password')
-		logging.info(username + ", " + password)
 		if (Database.valid_password(username, password)):
 			self.login(Database.get_user(username))
 			self.response.out.write("Success")
 		else:
 			self.response.out.write("Failure")
+
+class LogoutHandler(Handler):
+	def get(self):
+		self.logout()
+		self.redirect('/')
 
 class RegisterHandler(Handler):
 	def get(self):
@@ -104,13 +116,14 @@ class GettingInvolvedHandler(Handler):
 		self.render('gettinginvolved.html')
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
-    ('/about', AboutHandler),
-    ('/about/gettinginvolved', GettingInvolvedHandler),
-    ('/members', MembersHandler),
-    ('/members/moderator', ModeratorHandler),
-    ('/members/articles', ArticlesHandler),
-    ('/login', LoginPageHandler),
+	('/', MainHandler),
+	('/about', AboutHandler),
+	('/about/gettinginvolved', GettingInvolvedHandler),
+	('/members', MembersHandler),
+	('/members/moderator', ModeratorHandler),
+	('/members/articles', ArticlesHandler),
+	('/login', LoginPageHandler),
+	('/logout', LogoutHandler),
 	('/control/login', LoginHandler),
 	('/control/register', RegisterHandler),
 	('/control/getuser', GetUserHandler)

@@ -50,97 +50,32 @@
 <!-- Wrap the rest of the page in another container to center all the content. -->
 
 <div style="text-align: center;">
-	<div class="article" id="1">
-		<img class="img-circle" src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xaf1/t1.0-9/423154_10151323560641514_1304214525_n.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-		<div class="article-small" id="1">
-			<h2>"The 39 Steps" is Now Open!</h2>
-			<div>
-				There are 5 performances left. In addition, there are free LTT! improv shows following the performance on Saturday the 5th and Friday the 11th.
-			</div>
-			<br>
-			<p><a class="btn btn-default expand-article" role="button" id="1">Show details &raquo;</a></p>
+<!-- latest articles -->
+{% for article in articles %}
+	<div class="article" id="{{loop.index}}">
+	{% if article.image_url %}
+		<img class="img-circle" src="{{article.image_url}}" style="width: 140px; height: 140px;">
+	{% endif %}
+		<div class="article-small" id="{{loop.index}}">
+			<h2>{{article.heading}}</h2>
+			<div>{{article.summary}}</div><br>
+	{% if article.content %}
+			<p><a class="btn btn-default expand-article" role="button" id="{{loop.index}}">Show details &raquo;</a></p>
+	{% endif %}
 		</div>
-		<div class="article-big" id="1">
-			<h2 style="text-align:center;">"The 39 Steps" is Now Open!</h2>
-			<div class="lead">
-				COME ONE, COME ALL!<br>
-				<br>
-				DramaTech is currently presenting "The 39 Steps"! There are 5 performances left (check under the "shows" tab for more details). In addition, there are free LTT! improv shows following the performance on Saturday the 5th and Friday the 11th.<br>
-				<br>
-				Ticket prices are listed below.<br>
-				<br>
-				Students with valid student ID: $5<br>
-				<br>
-				General: $10<br>
-				<br>
-				Faculty: $8<br>
-				<br>
-				And, just to clear any confusion, students include not only Georgia Tech students, but any student with a valid student ID.<br>
-				<br>
-				Come have fun with us! Enjoy the night and (maybe) find out the secret of the 39 Steps!<br>
-			</div>
+	{% if article.content %}
+		<div class="article-big" id="{{loop.index}}">
+			<h2 style="text-align:center;">{{article.heading}}</h2>
+			<div class="lead">{{article.content}}</div>
 			<br>
-			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="1">&laquo; Hide details</a></p>
+			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="{{loop.index}}">&laquo; Hide details</a></p>
 		</div>
+	{% endif %}
 	</div>
-	<div class="article" id="2">
-		<img class="img-circle" src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xaf1/t1.0-9/423154_10151323560641514_1304214525_n.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-		<div class="article-small" id="2">
-			<h2>Heading</h2>
-			<div>
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p><a class="btn btn-default expand-article" role="button" id="2">Show details &raquo;</a></p>
-		</div>
-		<div class="article-big" id="2">
-			<h2 style="text-align:center;">Heading</h2>
-			<div class="lead">
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="2">&laquo; Hide details</a></p>
-		</div>
-	</div>
-	<div class="article" id="3">
-		<img class="img-circle" src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xaf1/t1.0-9/423154_10151323560641514_1304214525_n.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-		<div class="article-small" id="3">
-			<h2>Heading</h2>
-			<div>
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p><a class="btn btn-default expand-article" role="button" id="3">Show details &raquo;</a></p>
-		</div>
-		<div class="article-big" id="3">
-			<h2 style="text-align:center;">Heading</h2>
-			<div class="lead">
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="3">&laquo; Hide details</a></p>
-		</div>
-	</div>
-	<div class="article" id="4">
-		<img class="img-circle" src="https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xaf1/t1.0-9/423154_10151323560641514_1304214525_n.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-		<div class="article-small" id="4">
-			<h2>Heading</h2>
-			<div>
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p><a class="btn btn-default expand-article" role="button" id="4">Show details &raquo;</a></p>
-		</div>
-		<div class="article-big" id="4">
-			<h2 style="text-align:center;">Heading</h2>
-			<div class="lead">
-				Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-			</div>
-			<br>
-			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="4">&laquo; Hide details</a></p>
-		</div>
-	</div>
-	<hr>
+{% endfor %}
+
+<!-- permanent articles -->
+ 	<hr>
 	<div class="article">
 		<div class="article-small" id="-1">
 			<h2>Who we are</h2>

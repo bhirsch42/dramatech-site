@@ -6,10 +6,6 @@ import random
 from string import letters
 import datetime
 
-users_key = 'users'
-slides_key = 'slides'
-shows_key = 'shows'
-
 class Reservation(ndb.Model):
 	first_name = ndb.StringProperty()
 	last_name = ndb.StringProperty()
@@ -59,35 +55,13 @@ class Show(ndb.Model):
 	num_reservations = ndb.IntegerProperty()
 
 class Article(ndb.Model):
-	heading = ndb.StringProperty()
-	summary = ndb.TextProperty()
+	datetime_created = ndb.DateTimeProperty(required=True, auto_now_add=False)
+	image_url = ndb.StringProperty()
+	heading = ndb.StringProperty(required=True)
+	summary = ndb.TextProperty(required=True)
 	content = ndb.TextProperty()
 
-def add_user(first_name, last_name, username, password, email):
-	# check if user already exists
-	if username_exists(username):
-		return False
-
-	password_hash = make_password_hash(username, password)
-	now = datetime.datetime.now()
-
-	bio = Bio(image_url='', description='')
-	my_user = MyUser(datetime_created=now,
-					first_name=first_name,
-					last_name=last_name,
-					email=email,
-					username=username,
-					password=password_hash,
-					bio=bio,
-					permissions='')
-
-	my_user.put()
-	# update memcache
-	my_users = memcache.get(users_key)
-	add_user_to_dict(my_user, my_users)
-	memcache.set(users_key, my_users)
-	return True
-
+# User checks and permissions
 
 def set_permissions(username, bio_is_displayed=False,
 								is_a_moderator=False,
@@ -123,9 +97,9 @@ def set_permissions(username, bio_is_displayed=False,
 	my_user.permissions = s
 	my_user.put()
 	# update memcache
-	my_users = memcache.get(users_key)
-	add_user_to_dict(my_user, my_users)
-	memcache.set(users_key, my_users)
+	my_users = memcache.get('users')
+	cache(my_user, my_users)
+	memcache.set('users', my_users)
 	return True
 
 def has_permission(username, s):
@@ -135,49 +109,118 @@ def has_permission(username, s):
 	return s in my_user.permissions
 
 def username_exists(username):
-	return username in get_user_dict()
+	return username in memcache.get('users')
 
 def is_registered_user(user, update=False):
 	if not user:
 		return False
 	return username_exists(user.username())
 
-def get_user(username):
-	if not username in get_user_dict():
+# Articles
+
+def add_article(heading, summary, content, image_url):
+	now = datetime.datetime.now()
+	article = Article(datetime_created=now, heading=heading, summary=summary)
+	if content:
+		article.content = content
+	if image_url:
+		article.image_url = image_url
+	article.key = article.put()
+	cache(article)
+
+def update_article_cache():
+	articles = ndb.gql('SELECT * FROM Article')
+	logging.info('Updated article cache.')
+	d = {}
+	for article in articles:
+		d[article.key] = article
+	memcache.set('articles', d)
+
+def get_all_articles(update=False):
+	articles = memcache.get('articles')
+	if update or not articles:
+		update_article_cache()
+		articles = memcache.get('articles')
+	logging.info([articles[article] for article in articles])
+	return [articles[article] for article in articles]
+
+def get_article(k):
+	articles = memcache.get('articles')
+	if not articles:
+		update_article_cache()
+		articles = memcache.get('articles')
+	if not k in articles:
 		return None
-	return get_user_dict()[username]
+	return articles[k]
 
-def get_user_dict(update=False):
-	my_users = memcache.get(users_key)
+# Users
 
-	# update
-	if my_users is None or update:
-		update_user_memcache()
-		my_users = memcache.get(users_key)
-
-	return my_users
-
-def get_all_users(update=False):
-	users = get_user_dict(update)
-	return [users[user] for user in users]
-
-def update_user_memcache():
-	registered_users = ndb.gql("SELECT * FROM MyUser")
-	my_user_dict = {}
-	for registered_user in registered_users:
-		add_user_to_dict(registered_user, my_user_dict)
-	memcache.set(users_key, my_user_dict)
-
-def add_user_to_dict(my_user, d):
-	d[my_user.username] = my_user
-
-def is_registered_user(user, update=False):
-	if not user:
+def add_user(first_name, last_name, username, password, email):
+	# check if user already exists
+	if username_exists(username):
 		return False
 
-	# check if user exists
-	user_exists = user.user_id() in get_user_dict()
-	return user_exists
+	password_hash = make_password_hash(username, password)
+	now = datetime.datetime.now()
+
+	bio = Bio(image_url='', description='')
+	my_user = MyUser(datetime_created=now,
+					first_name=first_name,
+					last_name=last_name,
+					email=email,
+					username=username,
+					password=password_hash,
+					bio=bio,
+					permissions='')
+
+	my_user.key = my_user.put()
+	cache(my_user)
+	return True
+
+def update_user_cache():
+	registered_users = ndb.gql('SELECT * FROM MyUser')
+	logging.info('Updated user cache.')
+	d = {}
+	for registered_user in registered_users:
+		d[registered_user.username] = registered_user
+	memcache.set('users', d)
+
+def get_all_users(update=False):
+	users = memcache.get('users')
+	if update or not users:
+		update_user_cache()
+		users = memcache.get('users')
+	return [users[user] for user in users]
+
+def get_user(username):
+	users = memcache.get('users')
+	if not users:
+		update_user_cache()
+		users = memcache.get('users')
+	if not username in users:
+		return None
+	return users[username]
+
+# General caching
+
+def cache(obj):
+	if isinstance(obj, MyUser):
+		d = memcache.get('users')
+		d[obj.username] = obj
+		memcache.set('users', d)
+		logging.info("Cached a user.")
+		return True
+
+	if isinstance(obj, Article):
+		d = memcache.get('articles')
+		d[obj.key] = obj
+		memcache.set('articles', d)
+		logging.info("Cached an article.")
+		return True
+
+	return False
+
+# Passwords and security
 
 def make_salt(length = 5):
 	return ''.join(random.choice(letters) for x in xrange(length))
