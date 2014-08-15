@@ -53,6 +53,15 @@ class Handler(webapp2.RequestHandler):
 			return None
 		return Database.get_user(username)
 
+	def get_query(self):
+		s = self.request.query_string
+		queries = s.split('&')
+		query_dict = {}
+		for query in queries:
+			q = query.split('=')
+			query_dict[q[0]] = q[1]
+		return query_dict
+
 def make_secure_val(val):
 	secret = Secret.secret()
 	return '%s|%s' % (val, hmac.new(secret, val).hexdigest())

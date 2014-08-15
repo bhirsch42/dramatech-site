@@ -21,6 +21,7 @@ import Database
 import json
 from MemberHandlers import *
 from ArticleHandlers import *
+from CalendarHandlers import *
 
 class MainHandler(Handler):
 	def get(self):
@@ -117,6 +118,7 @@ class GettingInvolvedHandler(Handler):
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler),
+	('/calendar', CalendarHandler),
 	('/about', AboutHandler),
 	('/about/gettinginvolved', GettingInvolvedHandler),
 	('/members', MembersHandler),
@@ -126,5 +128,6 @@ app = webapp2.WSGIApplication([
 	('/logout', LogoutHandler),
 	('/control/login', LoginHandler),
 	('/control/register', RegisterHandler),
-	('/control/getuser', GetUserHandler)
+	('/control/getuser', GetUserHandler),
+	('/control/getevents', GetEventsHandler)
 ], debug=True)

@@ -98,8 +98,7 @@ def set_permissions(username, bio_is_displayed=False,
 	my_user.put()
 	# update memcache
 	my_users = memcache.get('users')
-	cache(my_user, my_users)
-	memcache.set('users', my_users)
+	cache(my_user)
 	return True
 
 def has_permission(username, s):

@@ -31,7 +31,14 @@
 			<li class="sidebar-brand"><a href="/">Dramatech Theater</a></li>
 			<li><a href="/members">My Account</a></li>
 			<li><a href="/members/moderator">Edit Permissions</a></li>
-			<li><a href="/members/articles">Manage Articles</a></li>
+
+			<div class="accordion-group">
+				<li><a data-toggle="collapse" data-target="#div1" data-parent="#parent">Manage Articles<i style="position: relative; left: -15px; top: -2px;" class="fa fa-sort-desc"></i></a></li>
+				<div id="div1" class="collapse">
+					<li><a href="/members/articles">Add Article</a></li>
+				</div>
+			</div>
+
 			<li><a href="/logout">Logout</a></li>
 		</ul>
 	</div>

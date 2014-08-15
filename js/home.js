@@ -7,6 +7,7 @@ window.onload = function() {
 var duration = 300;
 var oldLeft = 0
 var articleOpen = false;
+var oldScroll = 0
 $('a.expand-article').click(function() {
 	if (articleOpen) {
 		return
@@ -45,6 +46,7 @@ $('a.expand-article').click(function() {
 	})
 
 	// expand this article
+	oldScroll = $(window).scrollTop()
 	$('html, body').animate({
 		scrollTop: $("#" + id).offset().top
 	});
@@ -117,6 +119,11 @@ var id = this.id
 	$bigArticle.css({
 		"z-index": 99
 	})
+
+	$('html, body').animate({
+		scrollTop: oldScroll
+	});
+
 	articleOpen = false
 })
 

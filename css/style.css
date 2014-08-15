@@ -1,3 +1,17 @@
+/* CUSTOMIZE THE SIDEBAR
+-------------------------------------------------- */
+
+div.collapse > li > a {
+	position: relative;
+	padding-left: 20px;
+}
+
+div.collapsing > li > a {
+	position: relative;
+	padding-left: 20px;
+}
+
+
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
 
