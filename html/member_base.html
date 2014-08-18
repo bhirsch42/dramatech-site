@@ -8,12 +8,7 @@
 {% endblock css %}
 
 {% block js %}
-<script>
-	$("#menu-toggle").click(function(e) {
-		e.preventDefault();
-		$("#wrapper").toggleClass("active");
-	});
-</script>
+<script type="text/javascript" src="../js/member.js"></script>
 {% block member_js %}
 {% endblock member_js %}
 {% endblock js %}
@@ -39,6 +34,13 @@
 				</div>
 			</div>
 
+			<div class="accordion-group">
+				<li><a data-toggle="collapse" data-target="#div2" data-parent="#parent">Manage Carousel<i style="position: relative; left: -15px; top: -2px;" class="fa fa-sort-desc"></i></a></li>
+				<div id="div2" class="collapse">
+					<li><a href="/members/carousel">Add Slide</a></li>
+				</div>
+			</div>
+
 			<li><a href="/logout">Logout</a></li>
 		</ul>
 	</div>
@@ -50,6 +52,13 @@
 				<a id="menu-toggle" href="#" class="btn btn-default">
 					<i class="fa fa-bars"></i>
 				</a>
+				<script type="text/javascript">
+					$("#menu-toggle").click(function(e) {
+						e.preventDefault();
+						$("#wrapper").toggleClass("active");
+						console.log('hi');
+					});
+				</script>
 				{% block member_panel_header %}
 				{% endblock member_panel_header %}
 			</h1>

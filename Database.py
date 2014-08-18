@@ -37,9 +37,9 @@ class MyUser(ndb.Model):
 
 
 class CarouselSlide(ndb.Model):
-	datetime_created = ndb.DateTimeProperty(auto_now_add=True)
+	datetime_created = ndb.DateTimeProperty(required=True, auto_now_add=False)
 
-	image_url = ndb.StringProperty(required=True)
+	image_url = ndb.StringProperty()
 
 	title = ndb.StringProperty()
 	description = ndb.StringProperty()
@@ -49,6 +49,8 @@ class CarouselSlide(ndb.Model):
 
 
 class Show(ndb.Model):
+	datetime_created = ndb.DateTimeProperty(required=True, auto_now_add=False)
+
 	slide = ndb.StructuredProperty(CarouselSlide)
 
 	max_reservations = ndb.IntegerProperty()
@@ -151,6 +153,44 @@ def get_article(k):
 	if not k in articles:
 		return None
 	return articles[k]
+
+# Carousel Slides
+
+def add_carousel_slide(title, description, image_url, button_text, button_link):
+	now = datetime.datetime.now()
+	carousel_slide = carousel_slide(datetime_created=now,
+									title=title,
+									description=description,
+									image_url=image_url,
+									button_text=button_text,
+									button_link=button_link)
+	carousel_slide.key = carousel_slide.put()
+	cache(carousel_slide)
+
+def update_carousel_slide_cache():
+	carousel_slides = ndb.gql('SELECT * FROM CarouselSlide')
+	logging.info('Updated carousel_slide cache.')
+	d = {}
+	for carousel_slide in carousel_slides:
+		d[carousel_slide.key] = carousel_slide
+	memcache.set('carousel_slides', d)
+
+def get_all_carousel_slides(update=False):
+	carousel_slides = memcache.get('carousel_slides')
+	if update or not carousel_slides:
+		update_carousel_slide_cache()
+		carousel_slides = memcache.get('carousel_slides')
+	logging.info([carousel_slides[carousel_slide] for carousel_slide in carousel_slides])
+	return [carousel_slides[carousel_slide] for carousel_slide in carousel_slides]
+
+def get_carousel_slide(k):
+	carousel_slides = memcache.get('carousel_slides')
+	if not carousel_slides:
+		update_carousel_slide_cache()
+		carousel_slides = memcache.get('carousel_slides')
+	if not k in carousel_slides:
+		return None
+	return carousel_slides[k]
 
 # Users
 

@@ -21,6 +21,7 @@ import Database
 import json
 from MemberHandlers import *
 from ArticleHandlers import *
+from CarouselHandlers import *
 from CalendarHandlers import *
 
 class MainHandler(Handler):
@@ -124,6 +125,7 @@ app = webapp2.WSGIApplication([
 	('/members', MembersHandler),
 	('/members/moderator', ModeratorHandler),
 	('/members/articles', ArticlesHandler),
+	('/members/carousel', CarouselHandler),
 	('/login', LoginPageHandler),
 	('/logout', LogoutHandler),
 	('/control/login', LoginHandler),
