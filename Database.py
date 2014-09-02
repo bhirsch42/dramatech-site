@@ -45,7 +45,7 @@ class CarouselSlide(ndb.Model):
 	description = ndb.StringProperty()
 
 	button_text = ndb.StringProperty()
-	button_link = ndb.StringProperty()
+	button_url = ndb.StringProperty()
 
 
 class Show(ndb.Model):
@@ -156,14 +156,14 @@ def get_article(k):
 
 # Carousel Slides
 
-def add_carousel_slide(title, description, image_url, button_text, button_link):
+def add_carousel_slide(title, description, image_url, button_text, button_url):
 	now = datetime.datetime.now()
-	carousel_slide = carousel_slide(datetime_created=now,
+	carousel_slide = CarouselSlide(datetime_created=now,
 									title=title,
 									description=description,
 									image_url=image_url,
 									button_text=button_text,
-									button_link=button_link)
+									button_url=button_url)
 	carousel_slide.key = carousel_slide.put()
 	cache(carousel_slide)
 

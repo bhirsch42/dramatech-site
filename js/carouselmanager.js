@@ -17,9 +17,23 @@ function urlExists(url, callback) {
 	});
 }
 
+$('input:text[name=image-url]').keyup(function() {
+	var url = $(this).val()
+	urlExists(url, function(exists){
+		$image = $('img.template')
+		if (exists) {
+			$image.show()
+			$image.attr('src', url)
+		} else {
+			$image.hide()
+		}
+	});
+	console.log($('img.template'))
+})
+
 $('.create-new-slide[name=button-url]').keyup(function() {
 	var url = $(this).val()
-	$button = $('button.template')
+	$button = $('a.button-template')
 	$button.attr('href', url)
 	console.log('hi')
 })

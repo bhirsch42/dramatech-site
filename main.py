@@ -34,7 +34,9 @@ class MainHandler(Handler):
 			num_articles = len(articles)
 		for i in range(num_articles):
 			front_articles.append(articles[i])
-		self.render('home.html', articles=front_articles)
+
+		slides = Database.get_all_carousel_slides()
+		self.render('home.html', articles=front_articles, slides=slides)
 
 class LoginPageHandler(Handler):
 	def get(self):

@@ -14,11 +14,13 @@ class CarouselHandler(Handler):
 	def post(self):
 		user = self.get_user()
 		if user:
-			heading = self.request.get('heading')
-			summary = self.request.get('summary')
-			content = self.request.get('content')
 			image_url = self.request.get('image-url')
-			Database.add_article(heading, summary, content, image_url)
+			title = self.request.get('title')
+			description = self.request.get('description')
+			button_text = self.request.get('button-text')
+			button_url = self.request.get('button-url')	
+
+			Database.add_carousel_slide(title, description, image_url, button_text, button_url)
 			self.render('carousel.html')
 		else:
 			self.redirect('/login')		

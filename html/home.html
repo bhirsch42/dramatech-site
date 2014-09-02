@@ -6,83 +6,94 @@
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="../css/carousel.css">
+<style type="text/css">
+	body::after {
+		content: "";
+		background: url(http://i.imgur.com/jYItAuI.png) center center;
+		opacity: 0.05;
+		top: 550;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		height: 100%;
+		position: absolute;
+		z-index: -999;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+</style>
 {% endblock css %}
 
 {% block content %}
-<!-- Carousel
-	================================================== -->
-	<div id="myCarousel" class="carousel slide" data-ride="carousel" style="position:relative; top:50px;">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-		</ol>
-		<div class="carousel-inner">
-			<div class="item active">
-				<img src="http://www.love39steps.com/images/2012-home-noflash.jpg" alt="First slide">
-				<div class="container">
-					<div class="carousel-caption">
-						<h1>The 39 Steps</h1>
-						<p>This super swell play is playing and also it is very good.</p>
-						<p><a class="btn btn-lg btn-primary" href="#" role="button">Reserve a seat</a></p>
-					</div>
-				</div>
-			</div>
-			<div class="item">
-				<img src="https://scontent-a-mad.xx.fbcdn.net/hphotos-xfp1/t1.0-9/534743_10151323560701514_1668917346_n.jpg" alt="Second slide">
-				<div class="container">
-					<div class="carousel-caption">
-						<h1>Another example headline.</h1>
-						<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-						<p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
-					</div>
+
+<!-- Carousel -->
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" style="position:relative; top:50px;">
+	<!-- Indicators -->
+	<ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+	</ol>
+	<div class="carousel-inner">
+
+		{% for slide in slides %}
+		<div class="item {% if loop.index == 1 %}active{% endif %}">
+			<img src="{{slide.image_url}}" alt="First slide">
+			<div class="container">
+				<div class="carousel-caption">
+					<h1>{{slide.title}}</h1>
+					<p>{{slide.description}}</p>
+					{% if slide.button_text and slide.button_url %}
+					<p><a class="btn btn-lg btn-primary" href="{{slide.button_url}}" role="button">{{slide.button_text}}</a></p>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-		<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-		<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-	</div><!-- /.carousel -->
+		{% endfor %}
+	</div>
+	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>
 
 
+<!-- Articles -->
 
-<!-- Marketing messaging and featurettes
-================================================== -->
-<!-- Wrap the rest of the page in another container to center all the content. -->
-
-<div style="text-align: center;">
-<!-- latest articles -->
-{% for article in articles %}
+<div class="articles" style="text-align: center;">
+	<!-- latest articles -->
+	{% for article in articles %}
 	<div class="article" id="{{loop.index}}">
-	{% if article.image_url %}
+		{% if article.image_url %}
 		<img class="img-circle" src="{{article.image_url}}" style="width: 140px; height: 140px;">
-	{% endif %}
+		{% endif %}
 		<div class="article-small" id="{{loop.index}}">
 			<h2>{{article.heading}}</h2>
 			<div>{{article.summary}}</div><br>
-	{% if article.content %}
+			{% if article.content %}
 			<p><a class="btn btn-default expand-article" role="button" id="{{loop.index}}">Show details &raquo;</a></p>
-	{% endif %}
+			{% endif %}
 		</div>
-	{% if article.content %}
+		{% if article.content %}
 		<div class="article-big" id="{{loop.index}}">
 			<h2 style="text-align:center;">{{article.heading}}</h2>
-			<div class="lead">{{article.content}}</div>
+			<div class="lead">{{article.content|safe}}</div>
 			<br>
 			<p style="text-align:center;"><a class="btn btn-default contract-article" role="button" id="{{loop.index}}">&laquo; Hide details</a></p>
 		</div>
-	{% endif %}
+		{% endif %}
 	</div>
-{% endfor %}
+	{% endfor %}
 
-<!-- permanent articles -->
- 	<hr>
+	<!-- permanent articles -->
+	<hr>
 	<div class="article">
 		<div class="article-small" id="-1">
 			<h2>Who we are</h2>
 			<div>
-			DramaTech is the student run theater at Georgia Tech. Our goal is to further the presence of performing arts on campus, as well as in the surrounding city of Atlanta. We are the oldest continuously running theater in Atlanta—having been around since 1947.<br>
-			<br>
-			Trying to get to DramaTech? We've got directions available from most parts of the metropolitan Atlanta area.
+				DramaTech is the student run theater at Georgia Tech. Our goal is to further the presence of performing arts on campus, as well as in the surrounding city of Atlanta. We are the oldest continuously running theater in Atlanta—having been around since 1947.<br>
+				<br>
+				Trying to get to DramaTech? We've got directions available from most parts of the metropolitan Atlanta area.
 			</div>
 		</div>
 	</div>
