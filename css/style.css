@@ -53,6 +53,18 @@ div.article {
 	overflow: hidden;
 }
 
+/*
+@media (max-width:400px) {
+
+	div.article {
+		margin-right: 0;
+		margin-left: 0;
+		width: 100%;
+	}
+
+}
+*/
+
 div.panel {
 	height: 800px;
 	float: left;

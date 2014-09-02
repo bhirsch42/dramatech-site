@@ -257,6 +257,13 @@ def cache(obj):
 		logging.info("Cached an article.")
 		return True
 
+	if isinstance(obj, CarouselSlide):
+		d = memcache.get('carousel_slides')
+		d[obj.key] = obj
+		memcache.set('carousel_slides', d)
+		logging.info("Cached a carousel_slide.")
+		return True
+
 	return False
 
 # Passwords and security

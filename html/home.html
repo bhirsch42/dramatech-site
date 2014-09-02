@@ -33,8 +33,9 @@
 <div id="myCarousel" class="carousel slide" data-ride="carousel" style="position:relative; top:50px;">
 	<!-- Indicators -->
 	<ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-		<li data-target="#myCarousel" data-slide-to="1"></li>
+		{% for slide in slides %}
+		<li data-target="#myCarousel" data-slide-to="{{loop.index}}" {% if loop.index == 1 %}class="active"{% endif %}></li>
+		{% endfor %}
 	</ol>
 	<div class="carousel-inner">
 
@@ -86,7 +87,7 @@
 	{% endfor %}
 
 	<!-- permanent articles -->
-	<hr>
+	<br>
 	<div class="article">
 		<div class="article-small" id="-1">
 			<h2>Who we are</h2>
