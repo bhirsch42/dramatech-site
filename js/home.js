@@ -4,10 +4,40 @@ window.onload = function() {
 // Homepage articles
 // * * * * * * * * * * *
 
-var duration = 300;
+var duration = 500;
 var oldLeft = 0
 var articleOpen = false;
 var oldScroll = 0
+
+$( window ).resize(function() {
+	var $articles = $('.article')
+	if ($(window).width() < 400) {
+		$articles.each(function() {
+			$(this).css({
+				'width': "100%",
+				'height': "400px",
+				"margin-left":"0px",
+				"margin-right":"0px",
+				"border-radius":"5px",
+				"left": oldLeft,
+				"scrollTop": "0"
+			}, duration)
+		})
+	}
+	else {
+		$articles.each(function() {
+			$(this).css({
+				'width': "300px",
+				'height': "400px",
+				"margin":"20px",
+				"border-radius":"5px",
+				"left": oldLeft,
+				"scrollTop": "0"
+			}, duration)
+		})
+	}
+})
+
 $('a.expand-article').click(function() {
 	if (articleOpen) {
 		return
@@ -19,7 +49,6 @@ $('a.expand-article').click(function() {
 	var $bigArticle = $article.find(".article-big")
 	var thisTop = $article.offset().top - 20
 	oldLeft = $article.offset().left - 20
-	console.log(thisTop)
 	// hide all other articles
 	// fix all articles absolutely
 	var $articles = $('.article')
@@ -48,59 +77,112 @@ $('a.expand-article').click(function() {
 	// expand this article
 	oldScroll = $(window).scrollTop()
 	$('html, body').animate({
-		scrollTop: $("#" + id).offset().top
-	});
+		scrollTop: $("#" + id).offset().top,
+	}, duration, function() {
+		// $('html, body').css({
+		// 	"overflow": "hidden"
+		// })
+});
 	// var totalHeight = $bigArticle.outerHeight(true)
-	// console.log($bigArticle.outerHeight(true))
 	var curHeight = $article.height();
 	$article.css('height', 'auto');
 	var autoHeight = $article.height();
 	if ($(window).height() > autoHeight) {
 		autoHeight = $(window).height()
 	}
-	$article.height(curHeight).animate({
-		'width': "100%",
-		'height': autoHeight,
-		"border-radius":"0",
-		"left": "0",
-		"margin-left": "0",
-		"margin-right": "0",
+
+	if ($(window).width() < 400) {
+		$article.height(curHeight).animate({
+			'width': "100%",
+			'height': "100%",
+			"border-radius":"0",
+			// "left": "0",
+			"margin-left": "0",
+			"margin-right": "0",
+			"z-index": 100
+		}, duration, function() {
+			$article.css({
+				"overflow-y": "scroll"
+			})
+			$('html').css({
+				// scrollTop: $("#" + id).offset().top,
+				"overflow": "hidden"
+			})
+		})
+	} else {
+		$article.height(curHeight).animate({
+			'width': "100%",
+			'height': "100%",
+			"border-radius":"0",
+			"left": "0",
+			"margin-left": "0",
+			"margin-right": "0",
+			"z-index": 100
+		}, duration, function() {
+			$article.css({
+				"overflow-y": "scroll"
+			})
+			$('html').css({
+				// scrollTop: $("#" + id).offset().top,
+				"overflow": "hidden"
+			})
+		})
+	}
+	// layer the buttons properly
+
+	$smallArticle.fadeTo("fast", 0, function(){
+		$smallArticle.css({
+			"position": "absolute"
+		})
+	})
+	$bigArticle.fadeTo("slow", 1)
+	$smallArticle.css({
+		"z-index": 99
+	})
+	$bigArticle.css({
 		"z-index": 100
 	})
-		// layer the buttons properly
-
-		$smallArticle.fadeTo("fast", 0)
-		$bigArticle.fadeTo("slow", 1)
-		$smallArticle.css({
-			"z-index": 99
-		})
-		$bigArticle.css({
-			"z-index": 100
-		})
-	})
+})
 
 $('a.contract-article').click(function() {
-var id = this.id
-	// contract this article
+	var id = this.id
 	var $article = $('div.article#' + id)
-	console.log($article.oldLeft)
-	console.log($article)
-	$article.animate({
-		'width': "300px",
-		'height': "400px",
-		"margin":"20px",
-		"border-radius":"5px",
-		"left": oldLeft
-	})
 	var $smallArticle = $article.find(".article-small")
 	var $bigArticle = $article.find(".article-big")
+
+	// contract this article
+	$article.css({
+		"overflow": "hidden"
+	})
+	$('html').css({
+		"overflow-y": "scroll"
+	})
+	if ($(window).width() < 400) {
+		$article.animate({
+			// 'width': "300px",
+			'height': "400px",
+			// "margin":"20px",
+			"border-radius":"5px",
+			"left": oldLeft,
+			"scrollTop": "0"
+		}, duration)
+	}
+	else {
+		$article.animate({
+			'width': "300px",
+			'height': "400px",
+			"margin":"20px",
+			"border-radius":"5px",
+			"left": oldLeft,
+			"scrollTop": "0"
+		}, duration)
+	}
 	$smallArticle.fadeTo("slow", 1)
 	$bigArticle.fadeTo("fast", 0)
 
 	// show all other articles
 	var $articles = $('.article')
 	$articles.each(function(index) {
-		console.log(this.id)
 		if (id != this.id) {
 			$(this).fadeTo("slow", 1)
 		}
@@ -114,7 +196,8 @@ var id = this.id
 		})
 	})
 	$smallArticle.css({
-		"z-index": 100
+		"z-index": 100,
+		"position": "relative"
 	})
 	$bigArticle.css({
 		"z-index": 99
@@ -122,7 +205,7 @@ var id = this.id
 
 	$('html, body').animate({
 		scrollTop: oldScroll
-	});
+	}, duration);
 
 	articleOpen = false
 })

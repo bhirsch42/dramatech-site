@@ -48,12 +48,12 @@ div.article {
 	border-radius: 5px;
 	height: 400px;
 	width: 300px;
-	padding-top: 10px;
+	padding: 10px;
 	margin: 20px;
 	overflow: hidden;
 }
 
-/*
+
 @media (max-width:400px) {
 
 	div.article {
@@ -63,7 +63,7 @@ div.article {
 	}
 
 }
-*/
+
 
 div.panel {
 	height: 800px;
@@ -71,11 +71,15 @@ div.panel {
 }
 
 div.article-small {
-	position: absolute;
-	width: 300px;
-	max-width: 300px;
+	position: relative;
+	/*left: 10px;*/
+	/*right: 10px;*/
 	opacity: 1;
 	z-index: 1000;
+}
+
+div.article-small-content {
+	width: 100%;
 }
 
 div.article-big {

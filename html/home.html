@@ -70,7 +70,7 @@
 		{% endif %}
 		<div class="article-small" id="{{loop.index}}">
 			<h2>{{article.heading}}</h2>
-			<div>{{article.summary}}</div><br>
+			<div class="article-small-content">{{article.summary}}</div><br>
 			{% if article.content %}
 			<p><a class="btn btn-default expand-article" role="button" id="{{loop.index}}">Show details &raquo;</a></p>
 			{% endif %}
@@ -91,7 +91,7 @@
 	<div class="article">
 		<div class="article-small" id="-1">
 			<h2>Who we are</h2>
-			<div>
+			<div class="article-small-content">
 				DramaTech is the student run theater at Georgia Tech. Our goal is to further the presence of performing arts on campus, as well as in the surrounding city of Atlanta. We are the oldest continuously running theater in Atlanta—having been around since 1947.<br>
 				<br>
 				Trying to get to DramaTech? We've got directions available from most parts of the metropolitan Atlanta area.
@@ -101,7 +101,7 @@
 	<div class="article" id="-2">
 		<div class="article-small" id="-2">
 			<h2>What we do</h2>
-			<div>
+			<div class="article-small-content">
 				As a theater we organize productions for public performance. As students with voracious appetites for knowledge of all kinds we try to learn something in the process. With every show we try to create something that moves, inspires, or at a minimum entertains our audiences. These generally take one of the following forms...
 			</div>
 			<br>
